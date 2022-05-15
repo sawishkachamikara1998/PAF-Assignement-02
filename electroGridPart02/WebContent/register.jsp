@@ -1,6 +1,9 @@
 <%@page import="com.UserDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,15 +15,17 @@
 <script src="Components/register.js"></script>
 
 <link rel="stylesheet" href="Views/style.css" type="text/css"/>
+<link rel="stylesheet" href="Views/split.css" type="text/css"/>
 
 </head>
 <body>
 
 
 
-
-
-	<div class="container">
+<div class="split left">
+  <div class="centered">
+  
+  	<div class="container">
 		<h1 class="label">Register</h1>
 		
 		
@@ -53,21 +58,65 @@
 		<div id="alertSuccess" class="alert alert-success"></div>
 		<div id="alertError" class="alert alert-danger"></div>
 		
-		
-				<div id="divItemsGrid">
-				       <%
-		
-		UserDao userDao = new UserDao();
-		out.print(userDao.readCard());
-		%>
-
-				</div>
-				
-
-                
+	
 
 
 	</div>	
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="split right">
+  <div class="centered">
+
+<div class="edit">
+
+
+
+<h1 class="label">User Details</h1>
+
+  
+	<div id="divItemsGrid">
+	
+	<%
+	UserDao userDao = new UserDao();
+	out.print(userDao.readCard());
+	%>
+	        
+
+	</div>
+
+
+</div>
+
+
+
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

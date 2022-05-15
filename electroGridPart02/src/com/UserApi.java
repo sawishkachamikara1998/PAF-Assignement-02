@@ -59,8 +59,10 @@ public class UserApi extends HttpServlet {
 		
 		
 		Map paras = getParasMap(request);
-		boolean output = userDao.updateUserDetails(paras.get("email").toString(), paras.get("holderName").toString(),
-				paras.get("expiryDate").toString());
+		boolean output = userDao.updateUserDetails(paras.get("btnUpdate").toString(),
+				paras.get("register_email").toString(),
+				paras.get("register_name").toString(), paras.get("register_password").toString(),
+				paras.get("register_mobile").toString());
 		
 		response.getWriter().println(output);
 		
@@ -74,7 +76,7 @@ public class UserApi extends HttpServlet {
 		// TODO Auto-generated method stub
 
 		Map paras = getParasMap(request);
-		boolean output = userDao.deleteUser(paras.get("email").toString());
+		boolean output = userDao.deleteUser(paras.get("btnRemove").toString());
 		response.getWriter().println(output);
 
 	}

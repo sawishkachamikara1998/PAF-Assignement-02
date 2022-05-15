@@ -71,8 +71,8 @@ $(document).on("click", ".btnUpdate", function(event) {
 			$("#hidIDSave").val( $(this).closest("tr").find('#hidIDUpdate').val());
 			$("#register_email").val($(this).closest("tr").find('td:eq(0)').text());
 			$("#register_name").val($(this).closest("tr").find('td:eq(1)').text());
-			$("#register_password").val($(this).closest("tr").find('td:eq(2)').text());
-			$("#register_mobile").val($(this).closest("tr").find('td:eq(3)').text());
+			$("#register_password").val($(this).closest("tr").find('td:eq(3)').text());
+			$("#register_mobile").val($(this).closest("tr").find('td:eq(2)').text());
 		});
 
 

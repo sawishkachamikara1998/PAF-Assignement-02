@@ -23,7 +23,7 @@ public class UserDao {
 
 		try {
 
-			PreparedStatement ps1 = con.prepareStatement("select email from user where email=?");
+			PreparedStatement ps1 = con.prepareStatement("select email from user_new where email=?");
 			ps1.setString(1, email);
 			ResultSet rrs = ps1.executeQuery();
 
@@ -32,13 +32,14 @@ public class UserDao {
 			} else {
 
 				
-				PreparedStatement ps = con.prepareStatement("insert into user values(?,?,?,?, ?, ?)");
-				ps.setString(1, name);
-				ps.setString(2, email);
-				ps.setString(3, password);
-				ps.setString(4, mobile);
-				ps.setInt(5, otp);
-				ps.setString(6, "inActive");
+				PreparedStatement ps = con.prepareStatement("insert into user_new values(?,?,?,?,?, ?, ?)");
+				ps.setString(1, null);
+				ps.setString(2, name);
+				ps.setString(3, email);
+				ps.setString(4, password);
+				ps.setString(5, mobile);
+				ps.setInt(6, otp);
+				ps.setString(7, "inActive");
 
 				int i = ps.executeUpdate();
 
@@ -121,16 +122,21 @@ public class UserDao {
 
 	// update user profile
 
-	public static boolean updateUserDetails(String email, String name, String mobile) {
+	public static boolean updateUserDetails(String id, String email, String name, String mobile, String password) {
 
 		Connection con = dbConnection.connect();
 
+
 		try {
 
-			PreparedStatement ps = con.prepareStatement("update user set name=?, mobile=? where email=?");
+			PreparedStatement ps = con
+					.prepareStatement("update user set name=?, mobile=?, password=?, email=?  where ID=?");
 			ps.setNString(1, name);
 			ps.setNString(2, mobile);
-			ps.setNString(3, email);
+			ps.setNString(3, password);
+			ps.setNString(4, email);
+			ps.setInt(5, Integer.parseInt(id));
+
 			int i = ps.executeUpdate();
 
 			if (i > 0) {
@@ -149,14 +155,14 @@ public class UserDao {
 
 	// delete user profile
 
-	public static boolean deleteUser(String email) {
+	public static boolean deleteUser(String ID) {
 
 		Connection con = dbConnection.connect();
 
 		try {
 
-			PreparedStatement ps = con.prepareStatement("DELETE FROM user WHERE email=?");
-			ps.setNString(1, email);
+			PreparedStatement ps = con.prepareStatement("DELETE FROM user_new WHERE userID=?");
+			ps.setInt(1, Integer.parseInt(ID));
 			int i = ps.executeUpdate();
 
 			if (i > 0) {
@@ -300,28 +306,38 @@ public class UserDao {
 
 			// Prepare the html table to be displayed
 			output = "<table border='1'><tr><th>User's Email</th><th>User's Name</th>" + "<th>User's Mobile</th>"
-					+ "<th>Active or Not</th> </tr>" + "<th>Update</th><th>Remove</th></tr>";
-			String query = "select * from user";
+					+ "<th>password</th>" + "<th>Active or Not</th>" + "<th>Update</th><th>Remove</th></tr>";
+			String query = "select * from user_new";
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			// iterate through the rows in the result set
 			while (rs.next()) {
-				String name = rs.getString(1);
-				String email = rs.getString(2);
-				String mobile = rs.getString(4);
-				String status = rs.getString(6);
+				String ID = Integer.toString(rs.getInt(1));
+				String name = rs.getString(2);
+				String email = rs.getString(3);
+				String password = rs.getString(4);
+				String mobile = rs.getString(5);
+				String status = rs.getString(7);
 
 				// Add into the html table
-				output += "<tr><td><input id='hidIDUpdate'" + " name='hidIDUpdate' " + " type='hidden' value='" + email
+				output += "<tr><td><input id='hidIDUpdate'" + " name='hidIDUpdate' " + " type='hidden' value='" + ID
 						+ "'>" + email + "</td>";
 				output += "<td>" + name + "</td>";
 				output += "<td>" + mobile + "</td>";
+				output += "<td>" + password + "</td>";
 				output += "<td>" + status + "</td>";
+
 				// buttons
-				output += "<td><input name='btnUpdate'" + " type='button' value='Update'"
-						+ "class='btnUpdate btn btn-secondary'></td>" + "<td><input name='btnRemove'"
-						+ "type='button' value='Remove'" + " class='btnRemove btn btn-danger'" + " data-itemid='"
-						+ email + "'>" + "</td></tr>";
+//				output += "<td><input name='btnUpdate'" + " type='button' value='Update'"
+//						+ "class='btnUpdate btn btn-secondary'></td>" + "<td> <input name='btnRemove'"
+//						+ "type='button' value='Remove'" + " class='btnRemove btn btn-danger'" + " data-itemid='"
+//						+ email + "'>" + "</td></tr>";
+
+				output += "<td><input name='btnUpdate' type='button' value='Update' class=' btnUpdate btn btn-secondary'></td> "
+						+ "<td><form method='post' action='register.jsp'> " + "<input name='btnRemove' type='submit' "
+						+ "value='Remove' class='btn btn-danger'> " + "<input name='hidItemIDDelete' type='hidden' "
+						+ "value='" + ID + "'>" + "</form></td></tr>";
+
 			}
 			con.close();
 			// Complete the html table
